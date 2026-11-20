@@ -1,0 +1,13 @@
+# Production: API + frontend (lms-ui/public) bitta konteynerda.
+# UI_DIR — lms-ui repozitoriysidagi public papka (standart: yonma-yon klon qilingan ../lms-ui/public)
+services:
+  lms-app:
+    build: .
+    restart: unless-stopped
+    env_file: lms.env
+    ports:
+      - "${PORT:-3000}:3000"
+    volumes:
+      - ./data:/data
+      - ${UI_DIR:-../lms-ui/public}:/app/public:ro
+    mem_limit: 1g
