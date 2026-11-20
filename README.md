@@ -2,7 +2,7 @@
 
 **Malaka** — xodimlarni o'qitish va bilimini tekshirish platformasi (korporativ LMS) uchun backend API.
 
-Frontend: [lms-ui](../../../lms-ui) repozitoriysi.
+Frontend: [meyliyevjamol/lms-ui](https://github.com/meyliyevjamol/lms-ui)
 
 ## Imkoniyatlar
 
@@ -23,8 +23,8 @@ Node.js 22.13+ (tavsiya 24) · Express 5 · SQLite (`node:sqlite`, tashqi DB ker
 ## Tez ishga tushirish (Docker — tavsiya etiladi)
 
 ```bash
-git clone <lms-backend url>
-git clone <lms-ui url>          # yonma-yon: ../lms-ui/public frontend sifatida ulanadi
+git clone https://github.com/meyliyevjamol/lms-backend.git
+git clone https://github.com/meyliyevjamol/lms-ui.git          # yonma-yon: ../lms-ui/public frontend sifatida ulanadi
 cd lms-backend
 cp lms.env.example lms.env       # ADMIN_PASSWORD ni o'zgartiring
 docker compose up -d --build
