@@ -1,0 +1,37 @@
+name: Deploy
+
+# main'ga push yoki PR merge qilinganda backend serverda qayta build qilinadi.
+# Yangi versiya health-check'dan o'tmasa — server o'zi oldingi versiyaga qaytadi.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Bog'liqliklar va sintaksis tekshiruvi
+        run: |
+          npm install --omit=dev --no-audit --no-fund
+          for f in src/*.js; do node --check "$f"; done
+
+      - name: SSH sozlash
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy && chmod 600 ~/.ssh/deploy
+          echo "${{ secrets.DEPLOY_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+
+      - name: Serverga yuklash va qayta ishga tushirish
+        run: tar -c src package.json Dockerfile .dockerignore | ssh -i ~/.ssh/deploy -o IdentitiesOnly=yes root@${{ secrets.DEPLOY_HOST }} deploy-backend

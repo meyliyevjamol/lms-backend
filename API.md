@@ -88,3 +88,38 @@ Proktoring hodisa turlari: `tab_hidden, blur, fullscreen_exit, printscreen, copy
 | GET | `/admin/attempts/:id` | Urinish tafsiloti: javoblar, `violations[]`, `snapshots[]` |
 | GET | `/admin/snapshots/:id` | Kamera surati (JPEG) |
 | POST | `/admin/courses/:id/users/:uid/reset` | Xodimning shu kursdagi urinishlarini o'chirish |
+
+## Qo'shimcha endpointlar (v2)
+
+### Xodim
+| Metod | Yo'l | Izoh |
+|---|---|---|
+| GET | `/my/home` | Bosh sahifa: `month {name,total,done}`, `avgScore`, `dueSoon[]`, `courses[]`, `unread` |
+| GET | `/my/results` | Topshirilgan testlar tarixi (`showResult=false` bo'lsa ball yashiriladi) |
+| GET | `/my/notifications` · POST `/my/notifications/read` | Bildirishnomalar |
+| GET | `/my/telegram` | `{ enabled, botUsername, linked, username }` |
+| POST | `/my/telegram/link` | `{ url }` — `t.me/<bot>?start=<bir martalik token>` (24 soat) |
+| DELETE | `/my/telegram` | Telegramni uzish |
+| GET | `/files/:lessonId/download` | Asl faylni yuklab olish (`allowDownload` yoqilgan bo'lsa) |
+
+Savollar endi bir nechta to'g'ri javobli bo'lishi mumkin: `question.multi`, javob `answers: { [questionId]: [index, ...] }`.
+
+### Admin
+| Metod | Yo'l | Izoh |
+|---|---|---|
+| GET | `/admin/dashboard?weeks=12&department=&courseId=` | Bajarilish, holatlar taqsimoti, o'rtacha ball, o'tish %, faol xodimlar, haftalik dinamika, ballar taqsimoti, bo'limlar |
+| PUT | `/admin/courses/:id/assign` | `{ all, departments[], users[], deadline (ISO) }` — tayinlash (avtomatik nashr qiladi, yangi xodimlarga xabar yuboradi) |
+| POST | `/admin/courses/:id/remind` | `{ userIds? }` — topshirmaganlarga eslatma (platforma + Telegram) |
+| POST | `/admin/courses/:id/users/:uid/grant` | Qayta topshirishga ruxsat (+1 urinish) |
+| POST | `/admin/courses/:id/users/:uid/reset` | `{ materials: true }` — treningni qayta tayinlash |
+| POST | `/admin/users/import-file` | `multipart file` (.xlsx): Ism · Telefon · Bo'lim · Lavozim · Parol |
+| POST | `/admin/courses/:id/questions/import-file` | `.xlsx`: Savol · A · B · C · D … · To'g'ri javob (`B` yoki `A,C`) |
+| GET | `/admin/templates/users.xlsx` · `/admin/templates/questions.xlsx` | Shablonlar |
+| GET | `/admin/courses/:id/results.xlsx` · `/admin/report.xlsx` | Excel hisobotlar |
+
+Trening sozlamalari (`course`): `testTitle, shuffle, showResult, showCorrect, requireMaterials, allowDownload, assignAll, assignedUsers[]`.
+
+## Telegram bot
+`TELEGRAM_BOT_TOKEN` berilsa, server long polling bilan botni ishga tushiradi (webhook kerak emas).
+Xodim profilida «Telegramni ulash» → bot ochiladi → «Start». Bot xabar yuboradi: yangi tayinlov, eslatma, qayta ruxsat,
+muddatga 3 kun / 1 kun qolganda va muddat o'tganda (har biri bir marta). Buyruqlar: `/status`, `/stop`.
