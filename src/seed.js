@@ -101,9 +101,9 @@ const COURSES = [
   },
   {
     key: 'safety', title: 'Mehnat xavfsizligi', category: 'Majburiy', testTitle: 'Mehnat xavfsizligi: yillik test',
-    description: "Ish joyida xavfsizlik, yong'in va birinchi yordam qoidalari. Barcha xodimlar uchun majburiy.",
+    description: "Ish joyida xavfsizlik, yong'in va birinchi yordam qoidalari. Barcha xodimlar uchun majburiy. Yillik test kamera nazorati ostida topshiriladi.",
     assign: { all: true }, deadlineDays: 2, createdDaysAgo: 40,
-    pass: 70, time: 20, attempts: 1, qcount: 0, camera: 0, screen: 1, maxViol: 5, allowDownload: 1, showCorrect: 1,
+    pass: 70, time: 20, attempts: 1, qcount: 0, camera: 1, screen: 1, maxViol: 5, allowDownload: 1, showCorrect: 1,
     lessons: [
       { type: 'pdf', title: 'Xavfsizlik qoidalari', doc: 'safety' },
       { type: 'video', title: "Yong'in xavfsizligi", kicker: 'MEHNAT XAVFSIZLIGI', palette: ['0x3a0d0d', '0xdc2626'],
